@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>连连看游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: url('images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .jump-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .jump-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            margin-top: 20px;
+            overflow: hidden;
+            background-color: #333;
+        }
+        
+        #background-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+        
+        #game-board {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            z-index: 2;
+        }
+        
+        .tile {
+            background: white;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            margin: 0;
+        }
+        
+        .tile:hover {
+            background: #f5f5f5;
+        }
+        
+        .tile.selected {
+            border: 2px solid #3498db;
+            background: #e6f2ff;
+        }
+        
+        .tile.matched {
+            background: transparent;
+            border-color: transparent;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .icon {
+            font-size: 28px;
+            z-index: 3;
+            color: #333;
+        }
+        
+        .revealed-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .tile.matched .revealed-image {
+            opacity: 1;
+        }
+        
+        #controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+        
+        #timebar {
+            width: 800px;
+            height: 20px;
+            background: #ddd;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        #timebar-inner {
+            height: 100%;
+            width: 100%;
+            background: green;
+            transition: width 1s linear;
+        }
+        
+        #timeleft {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <button class="jump-btn" id="jumpBtn">跳过游戏</button>
+    
+    <div id="controls">
+        <button id="start-btn">开始游戏</button>
+        <span id="score">分数: 0</span>
+    </div>
+    <div id="timebar">
+        <div id="timebar-inner"></div>
+        <div id="timeleft">120</div>
+    </div>
+    
+    <div class="game-container">
+        <div id="background-image"></div>
+        <div id="game-board"></div>
+    </div>
+
+    <script>
+        const config = {
+            rows: 6,
+            cols: 8,
+            types: 12,
+            timeLimit: 120,
+            imageUrl: 'images/game_bg.jpg'
+        };
+        
+        let gameActive = false;
+        let selectedTile = null;
+        let score = 0;
+        let timeLeft = 0;
+        let timer;
+        let tiles = [];
+        let gameSuccess = false; // 新增状态记录是否成功
+        
+        const icons = [
+            'fa-user-secret',  'fa-search',  'fa-fingerprint',  'fa-file-alt', 
+            'fa-binoculars',  'fa-camera', 'fa-microscope', 'fa-map-marked-alt',   
+            'fa-clock',  'fa-envelope', 'fa-key',  'fa-lock'        
+        ];
+        
+        function initGame() {
+            document.getElementById('background-image').style.backgroundImage = `url('${config.imageUrl}')`;
+            
+            gameActive = true;
+            selectedTile = null;
+            score = 0;
+            gameSuccess = false;
+            timeLeft = config.timeLimit;
+            document.getElementById('score').textContent = `分数: ${score}`;
+            document.getElementById('timeleft').textContent = timeLeft;
+            document.getElementById('timebar-inner').style.width = '100%';
+            document.getElementById('timebar-inner').style.backgroundColor = 'green';
+            
+            createGameBoard();
+            startTimer();
+        }
+        
+        function createGameBoard() {
+            const gameBoard = document.getElementById('game-board');
+            gameBoard.innerHTML = '';
+            tiles = [];
+            
+            const totalTiles = config.rows * config.cols;
+            const pairsNeeded = Math.floor(totalTiles / 2);
+            
+            let pairs = [];
+            for (let i = 0; i < pairsNeeded; i++) {
+                const type = i % config.types;
+                pairs.push(type, type);
+            }
+            
+            if (totalTiles % 2 !== 0) {
+                pairs.push(-1);
+            }
+            
+            shuffleArray(pairs);
+            
+            for (let i = 0; i < config.rows; i++) {
+                for (let j = 0; j < config.cols; j++) {
+                    const index = i * config.cols + j;
+                    const type = pairs[index];
+                    
+                    const tile = document.createElement('div');
+                    tile.className = 'tile';
+                    tile.dataset.row = i;
+                    tile.dataset.col = j;
+                    tile.dataset.type = type;
+                    
+                    if (type !== -1) {
+                        const icon = document.createElement('i');
+                        icon.className = `fas ${icons[type]} icon`;
+                        tile.appendChild(icon);
+                        
+                        const imgClip = document.createElement('img');
+                        imgClip.className = 'revealed-image';
+                        imgClip.src = config.imageUrl;
+                        imgClip.style.objectPosition = `${(j / config.cols) * 100}% ${(i / config.rows) * 100}%`;
+                        tile.appendChild(imgClip);
+                        
+                        tile.addEventListener('click', handleTileClick);
+                    }
+                    
+                    gameBoard.appendChild(tile);
+                    tiles.push(tile);
+                }
+            }
+        }
+        
+        function handleTileClick(e) {
+            if (!gameActive) return;
+            
+            const tile = e.currentTarget;
+            const type = parseInt(tile.dataset.type);
+            
+            if (type === -1) return;
+            
+            if (selectedTile === null) {
+                selectedTile = tile;
+                tile.classList.add('selected');
+            } else if (selectedTile === tile) {
+                selectedTile.classList.remove('selected');
+                selectedTile = null;
+            } else {
+                const selectedType = parseInt(selectedTile.dataset.type);
+                
+                if (selectedType === type && canConnect(selectedTile, tile)) {
+                    score += 10;
+                    document.getElementById('score').textContent = `分数: ${score}`;
+                    
+                    selectedTile.classList.add('matched');
+                    tile.classList.add('matched');
+                    
+                    if (checkGameComplete()) {
+                        gameSuccess = true; // 游戏成功
+                        endGame(true);
+                    }
+                }
+                
+                selectedTile.classList.remove('selected');
+                selectedTile = null;
+            }
+        }
+        
+        function canConnect(tile1, tile2) {
+            const row1 = parseInt(tile1.dataset.row);
+            const col1 = parseInt(tile1.dataset.col);
+            const row2 = parseInt(tile2.dataset.row);
+            const col2 = parseInt(tile2.dataset.col);
+            
+            if (row1 === row2 && isPathClear(row1, col1, col2, 'row')) return true;
+            if (col1 === col2 && isPathClear(col1, row1, row2, 'col')) return true;
+            if (isOneCornerConnected(row1, col1, row2, col2)) return true;
+            if (isTwoCornerConnected(row1, col1, row2, col2)) return true;
+            
+            return false;
+        }
+        
+        function isPathClear(fixed, start, end, direction) {
+            if (start > end) [start, end] = [end, start];
+            for (let i = start + 1; i < end; i++) {
+                let row = direction === 'row' ? fixed : i;
+                let col = direction === 'row' ? i : fixed;
+                const tile = getTileAt(row, col);
+                if (tile && !tile.classList.contains('matched')) return false;
+            }
+            return true;
+        }
+        
+        function getTileAt(row, col) {
+            return tiles.find(t => parseInt(t.dataset.row) === row && parseInt(t.dataset.col) === col);
+        }
+        
+        function isOneCornerConnected(row1, col1, row2, col2) {
+            return (isPathClear(col1, row1, row2, 'col') && 
+                    isPathClear(row2, col1, col2, 'row') &&
+                    !getTileAt(row2, col1).classList.contains('matched')) ||
+                   (isPathClear(row1, col1, col2, 'row') && 
+                    isPathClear(col2, row1, row2, 'col') &&
+                    !getTileAt(row1, col2).classList.contains('matched'));
+        }
+        
+        function isTwoCornerConnected(row1, col1, row2, col2) {
+            for (let i = 0; i < config.rows; i++) {
+                if (i !== row1 && i !== row2 &&
+                    isPathClear(i, col1, col2, 'row') &&
+                    isPathClear(col1, row1, i, 'col') &&
+                    isPathClear(col2, i, row2, 'col')) return true;
+            }
+            for (let j = 0; j < config.cols; j++) {
+                if (j !== col1 && j !== col2 &&
+                    isPathClear(j, row1, row2, 'col') &&
+                    isPathClear(row1, col1, j, 'row') &&
+                    isPathClear(row2, j, col2, 'row')) return true;
+            }
+            return false;
+        }
+        
+        function checkGameComplete() {
+            return tiles.every(tile => {
+                const type = parseInt(tile.dataset.type);
+                return type === -1 || tile.classList.contains('matched');
+            });
+        }
+        
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                if (!gameActive) return;
+                timeLeft--;
+                document.getElementById('timeleft').textContent = timeLeft;
+                
+                const percentage = (timeLeft / config.timeLimit) * 100;
+                const bar = document.getElementById('timebar-inner');
+                bar.style.width = `${percentage}%`;
+                
+                if (percentage <= 25) bar.style.backgroundColor = 'red';
+                else if (percentage <= 50) bar.style.backgroundColor = 'yellow';
+                else bar.style.backgroundColor = 'green';
+                
+                if (timeLeft <= 0) endGame(false);
+            }, 1000);
+        }
+        
+        function endGame(isWin) {
+            gameActive = false;
+            clearInterval(timer);
+            if (!isWin) gameSuccess = false;
+            alert(isWin ? '恭喜你赢了！' : '时间到！游戏结束');
+        }
+        
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        document.getElementById('start-btn').addEventListener('click', initGame);
+        
+        // 跳过游戏按钮逻辑
+        document.getElementById('jumpBtn').addEventListener('click', function() {
+            if (gameSuccess) {
+                window.location.href = '../../主线/nanzhu/html/end7.html'; // 成功跳转网页1
+            } else {
+                window.location.href = '../../主线/nanzhu/html/6.html'; // 未完成或失败跳转网页2
+            }
+        });
+    </script>
+</body>
+</html>

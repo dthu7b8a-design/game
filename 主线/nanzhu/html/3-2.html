@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重置年</title>
+    <link rel="stylesheet" href="../css.css">
+    <script src="../js/3-2.js"></script>
+    <script src="../op1.js"></script>
+    <script src="../op2.js"></script>
+    <script src="../jquery-3.6.0.js"></script>
+    <audio id="bgm"  src=""></audio>
+
+    <style>
+    body{
+        /* 背景图片 */
+        background-image: url('../图片/chehuo.png');
+    }
+        /* 让选项框一开始不出现 */
+    #selection_box {
+            display: none;
+        }
+    </style>
+
+
+</head>
+<body onload="initGame()">
+    <div id="message" class="message">存档成功</div>
+
+    <div id="small">
+       <img id="small_pic" src="" alt="">
+    </div>
+    <div id="dialog" onclick="{ next_move();bgmplay()}"></div>
+    <div id="text-box" onclick="{  next_move();bgmplay()}">
+        <p id="name"></p>
+        <p id="texts"></p>
+    </div>
+
+    <div class="button-container">
+        <button class="scene-button" onclick="skipDialogue()">SKIP</button> 
+        <button class="scene-button" onclick="saveGame('role1')">SAVE</button>
+        <button class="scene-button" onclick="window.location.href='../../../注册and登陆/menu.html';">RETURN</button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>重置年</title>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body{
+            background-image: url('./zf.png');
+        }
+    </style>
+    <title>Achievement</title>
+    <link rel="stylesheet" type="text/css" href="../css/htmleaf-demo.css">
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <h1 class="S2">成就页面</h1>
+            <div class="nav-links">
+                <a href="../../achievement/achievement.html">返回上一页</a>
+                <a href="../../../注册and登陆/menu.html">返回主页</a>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <script>
+            window.onload = function () {
+            var index = window.localStorage.userid;
+            var array = JSON.parse(window.localStorage.userArr || "[]");
+            var userData = array[index] || {};
+
+// 初始化当前角色的成就数据
+var roleData = userData['jiabaonan'] || {};
+if (Object.keys(roleData).length === 0) {
+    roleData = {
+        achi1: 0,
+        achi2: 0,
+        achi3: 0,
+        achi4: 0
+        /* 其他成就属性 */
+    };
+    userData['jiabaonan'] = roleData; // 更正这里
+    array[index] = userData;   // 添加这一行
+}
+        console.log('Role Data:', roleData);
+
+    // achi1
+    var achi = roleData.achi1;
+    if (achi == 1) {
+        var tmp = document.getElementById('1');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p11').innerHTML = '赎罪的新生';
+        document.getElementById('p12').innerHTML = '背负着沉重愧疚，贾宝南决心用余生去改正错误、换取新开始的复杂情感和坚定誓言。';
+    }
+
+    // achi2
+    achi = roleData.achi2;
+    if (achi == 1) {
+        var tmp = document.getElementById('2');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p21').innerHTML = '锒铛入狱';
+        document.getElementById('p22').innerHTML = '所谓的“重置年”带来的不是刷新，而是最终的审判和惩罚。牢狱生涯和内心的悔恨将如同无尽的长夜，没有“重置”的希望。';
+    }
+
+    // achi3
+    achi = roleData.achi3;
+    if (achi == 1) {
+        var tmp = document.getElementById('3');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p31').innerHTML = '她的“重置年”';
+        document.getElementById('p32').innerHTML = '贾宝南期待的刷新没有到来，反而是妻子用最极端的方式给了他一个“了断”，完成了属于她的、残酷的“重置”';
+    }
+
+    // achi4
+    achi = roleData.achi1 + roleData.achi2 + roleData.achi3;
+    if (achi == 3) {
+        var tmp = document.getElementById('4');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p41').innerHTML = '所有的假设';
+        document.getElementById('p42').innerHTML = '通关全结局';
+    }
+
+}
+        </script>
+        <div class="cols">
+            <div id=1 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/jbn/1.png)">
+                        <div class="inner">
+                            <p id=p11>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p12 class="backstyle">结局成就1</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=2 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/jbn/2.png)">
+                        <div class="inner">
+                            <p id=p21>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p22 class="backstyle">结局成就2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=3 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/jbn/3.png)">
+                        <div class="inner">
+                            <p id=p31>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p32 class="backstyle">结局成就3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=4 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/all.png)">
+                        <div class="inner">
+                            <p id=p41>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p42 class="backstyle">通关全结局</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <footer>
+        <h2>copyright 无限灵感工作室</h2>
+    </footer>
+
+</html>

@@ -1,0 +1,205 @@
+<!-- music-controls.html -->
+<div class="music-controls-container">
+    <div class="music-controls">
+        <div class="control-button" id="play-pause-btn">
+            <i class="fas fa-play" id="play-icon"></i>
+        </div>
+        <div class="controls-panel">
+            <div class="volume-control">
+                <i class="fas fa-volume-up" id="volume-icon"></i>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+            </div>
+            <div class="status-info">
+                <p>当前音乐状态：<span id="music-status" class="status-value">加载中...</span></p>
+                <p>音量：<span id="volume-value" class="status-value">50%</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 注意：真正的 <audio> 标签应放在单独的父页面里，避免随页面跳转销毁 -->
+<!-- 仅用于本文件单独测试时启用 -->
+<audio id="bgm" loop style="display:none">
+   <source src="../music/主界面.wav" type="audio/mpeg">
+</audio>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let bgm = window.top.document.getElementById('bgm'); 
+        // 如果父页面没有audio，就用当前页面的（方便单页测试）
+        if (!bgm) bgm = document.getElementById('bgm');
+
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeIcon = document.getElementById('volume-icon');
+        const musicStatus = document.getElementById('music-status');
+        const volumeValue = document.getElementById('volume-value');
+
+        // 读取历史记录
+        const savedVolume = localStorage.getItem('bgmVolume') || 0.5;
+        const savedPlayingState = localStorage.getItem('bgmPlaying') === 'true';
+
+        bgm.volume = parseFloat(savedVolume);
+        volumeSlider.value = savedVolume;
+        updateVolumeDisplay();
+
+        if (savedPlayingState) {
+            bgm.play().then(() => {
+                musicStatus.textContent = "播放中";
+                playIcon.className = "fas fa-pause";
+            }).catch(e => console.log("自动播放被阻止: ", e));
+        } else {
+            musicStatus.textContent = "已暂停";
+            playIcon.className = "fas fa-play";
+        }
+
+        // 播放/暂停
+        playPauseBtn.addEventListener('click', function() {
+            if (bgm.paused) {
+                bgm.play();
+                localStorage.setItem('bgmPlaying', 'true');
+                musicStatus.textContent = "播放中";
+                playIcon.className = "fas fa-pause";
+            } else {
+                bgm.pause();
+                localStorage.setItem('bgmPlaying', 'false');
+                musicStatus.textContent = "已暂停";
+                playIcon.className = "fas fa-play";
+            }
+        });
+
+        // 音量控制
+        volumeSlider.addEventListener('input', function() {
+            bgm.volume = volumeSlider.value;
+            localStorage.setItem('bgmVolume', volumeSlider.value);
+            updateVolumeDisplay();
+        });
+
+        function updateVolumeDisplay() {
+            const volPercent = Math.round(bgm.volume * 100);
+            volumeValue.textContent = `${volPercent}%`;
+            volumeIcon.className = bgm.volume == 0 ? 'fas fa-volume-mute' :
+                                   bgm.volume < 0.5 ? 'fas fa-volume-down' : 'fas fa-volume-up';
+        }
+    });
+</script>
+
+<style>
+        /* 音乐控制组件样式 */
+        .music-controls-container {
+            position: fixed;
+            top: 30vh;
+            right: 5vh;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            transition: all 0.4s ease;
+        }
+        
+        .music-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(190, 190, 190, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-button:hover {
+            background: rgba(110, 110, 110, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 新的控制面板容器 */
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 200px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+        
+        .music-controls:hover .controls-panel {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .volume-icon {
+            font-size: 1.2rem;
+            color: #ffffff;
+            width: 20px;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #fff;
+        }
+        
+        /* 状态信息样式 */
+        .status-info {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #ccc;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        
+        .status-info p {
+            margin: 5px 0;
+        }
+        
+        .status-value {
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+</style>
+

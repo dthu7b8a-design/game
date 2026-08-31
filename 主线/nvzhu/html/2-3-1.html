@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>剧情浮现页面</title>
+    <style>
+        /* 页面整体黑色背景，文字居中 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* 文字样式 */
+        .text {
+            color: #fff;
+            font-size: 2rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            max-width: 90%;
+            line-height: 1.5;
+        }
+
+        /* 按钮样式 */
+        #jumpBtn {
+            margin-top: 40px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #fff;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            display: none; /* 初始隐藏，最后一条文字显示后显示按钮 */
+        }
+
+        #jumpBtn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- 文字容器 -->
+    <div id="textContainer" class="text"></div>
+
+    <!-- 跳转按钮 -->
+    <button id="jumpBtn">继续</button>
+
+    <script>
+        const lines = [
+            "“原来这一切都是你在骗我”",
+            "“你利用我的真心”",
+            "“践踏我的感情”",
+            "“把我对你的爱当成你复仇的工具”",
+            "“去自首吧，放过我也放过你自己”",
+            "坐在冰冷刺骨的地板上，眼前是被铁窗分割成数块的夜空，低头看着身上的囚服，我止住了回忆。",
+            "脑中却不由地幻想着:",
+            "若重置年真的存在，我又将何去何从呢...."
+        ];
+
+        let index = 0;
+        const container = document.getElementById('textContainer');
+        const jumpBtn = document.getElementById('jumpBtn');
+
+        // 点击显示下一句
+        document.body.addEventListener('click', () => {
+            if (index < lines.length) {
+                container.style.opacity = 0; // 先淡出
+                setTimeout(() => {
+                    container.textContent = lines[index];
+                    container.style.opacity = 1; // 再淡入
+                    index++;
+                    // 最后一条文字显示后显示按钮
+                    if(index === lines.length) {
+                        jumpBtn.style.display = 'block';
+                    }
+                }, 300); // 与 CSS transition 同步淡出时间
+            }
+        });
+
+        // 按钮跳转
+        jumpBtn.addEventListener('click', () => {
+            window.location.href = './end3.html'; // 修改为你的目标网页
+        });
+    </script>
+</body>
+</html>

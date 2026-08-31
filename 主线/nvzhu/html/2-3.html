@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重置年</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
+    background-color:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    font-family:'Microsoft YaHei',sans-serif;
+}
+.container {
+    max-width:150vh;
+    width:100%;
+    padding:40px;
+    background:rgba(0,0,0,0.85);
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    color:#fff;
+    text-align: center;
+}
+#typewriter-text {
+    font-size:1.5rem;
+    line-height:2;
+    cursor:pointer;
+    min-height:200px;
+    white-space:pre-wrap;
+}
+.btn {margin-top:20px;padding:10px 25px;border:none;border-radius:50px;cursor:pointer;background:#fff;color:#000;font-weight:bold;transition:0.3s;}
+.btn:hover {background:#ccc;}
+</style>
+</head>
+<body>
+<div class="container">
+    <div id="typewriter-text">点击这里开始剧情</div>
+    <button class="btn" id="start-btn">播放独白自述</button>
+</div>
+
+<audio id="bgm">
+    <source src="../bgm/result.wav" type="audio/mpeg">
+</audio>
+<audio id="typewriter-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-typewriter-tap-1325.mp3"></audio>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+    const storyText=`如同往常一般，我敲响家门，回到那个令人恐惧又厌恶的地狱。我本以为这次还是忍一忍就会过去，可贾宝南这个混蛋竟然又下了死手。我奄奄一息瘫倒在地上，只得妥协让他抵押房产。贾宝南推门而出，身上的剧痛和儿子的哭泣声使我冷静下来，我对这个禽兽已经彻底失望，为了我和儿子的生命安全，我必须解决他。
+自此以后，我开始对他百依百顺，他乐在其中，但对我们母子二人的暴行却一刻不停，我咬牙假意顺从着，心中的杀意已然凝实。24号他花天酒地直到半夜才回家，我给他递上一杯茶水，他喝完便一头栽倒在地。他又怎么会知道这是我为他精心准备的"大礼"。而且我还要借他臆想出的"重置年"作为幌子来掩盖这一切。
+我掏出手机，看着已经编辑好的短信点击了发送，而发送对象正是我的老同学--郑义。我要借他之手彻底摆脱贾宝南。我知道他一定会帮我的。
+一切都在按我的计划进行着，郑义被引到了我制造的车祸现场。不出意料，他相信了我精心为他营造的"重置年"骗局，帮助我完成了这次完美犯罪。原本的计划中，车祸后我将离开这座城市，可郑义那毅然伸出的援手，使我平静许久的心又荡起一圈圈涟漪。自那之后，我们生活在了一起，郑义也一直没有表现出异常，不知道是真的没发现，还是因为心底那并未消散的感情。直到那一天....。`;
+
+    const typewriterText=document.getElementById('typewriter-text');
+    const startBtn=document.getElementById('start-btn');
+    const bgm=document.getElementById('bgm');
+    const typewriterSound=document.getElementById('typewriter-sound');
+
+    let charIndex=0;
+    let typingSpeed=100; // 速度可以调整，大约两分钟完成
+    let isTyping=false;
+    let typingTimeout;
+    let typingCompleted=false;
+    let audioCompleted=false;
+
+    bgm.volume=0.7;
+
+    function checkCompletion(){
+        if(typingCompleted && audioCompleted){
+            window.location.href="2-3-1.html";
+        }
+    }
+
+    function typeStory(){
+        typewriterText.innerHTML='';
+        charIndex=0;
+        isTyping=true;
+        typingCompleted=false;
+
+        function typeChar(){
+            if(charIndex<storyText.length){
+                typewriterText.innerHTML+=storyText[charIndex];
+                charIndex++;
+                typewriterSound.currentTime=0;
+                typewriterSound.play().catch(()=>{});
+                typingTimeout=setTimeout(typeChar,typingSpeed);
+            }else{
+                isTyping=false;
+                typingCompleted=true;
+                checkCompletion();
+            }
+        }
+        typeChar();
+    }
+
+    startBtn.addEventListener('click',()=>{
+        bgm.play().catch(()=>{});
+        typeStory();
+    });
+
+    bgm.addEventListener('ended',()=>{
+        audioCompleted=true;
+        checkCompletion();
+    });
+});
+</script>
+</body>
+</html>

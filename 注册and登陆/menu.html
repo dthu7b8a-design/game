@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.css">
+  <title>重置年</title>
+<style>
+    iframe#music-frame {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 250px;
+      height: 100px;
+      border: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- 背景音乐标签（固定在主页面） -->
+  <audio id="bgm" loop>
+    <source src="../music/bgm/主界面.wav" type="audio/mpeg">
+  </audio>
+
+  <!-- 右上角音乐控制组件（iframe加载，避免重复） -->
+  <!--<iframe src="../music/music-controls.html" frameborder="0" style="position:fixed;top:0;right:0;width:300px;height: 400px;z-index:1000;background:transparent;"></iframe>-->
+  
+  <div class="header">
+    <div class="nav">
+      <h1 class="S2">重置年</h1>
+      <div class="nav-links">
+        <a href="../成就界面/achievement/achievement.html">成就页面</a>
+        <a href="../玩法介绍/玩法介绍.html">玩法介绍</a>
+        <a href="./introduction/intro/intro.html">关于我们</a>
+        <a href="./login.html">退出登录</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <h1 class="character-select-title">请选择你的角色</h1>
+    
+    <!-- 角色存档容器 -->
+    <div class="archive-container">
+      <!-- 角色1存档区块 -->
+      <div class="character-archive" id="role1-archive">
+        <div class="character-info">
+          <div class="character-name">郑义</div>
+          <a href="../主线/nanzhu/html/1.html" class="new-game-btn">新游戏</a>
+        </div>
+        <div class="save-info">
+          <div class="continue-btn" id="role1-continue-text">继续游戏</div>
+          <div class="save-time" id="role1-save-time"></div>
+          <div class="dialogue-preview" id="role1-dialogue"></div>
+          <div class="no-save" id="role1-no-save">暂无存档</div>
+        </div>
+      </div>
+      
+      <!-- 角色2存档区块 -->
+      <div class="character-archive" id="role2-archive">
+        <div class="character-info">
+          <div class="character-name">林晚星</div>
+          <a href="../主线/nvzhu/html/2.html" class="new-game-btn locked">Locked</a>
+        </div>
+        <div class="save-info">
+          <div class="continue-btn" id="role2-continue-text">继续游戏</div>
+          <div class="save-time" id="role2-save-time"></div>
+          <div class="dialogue-preview" id="role2-dialogue"></div>
+          <div class="no-save" id="role2-no-save">暂无存档</div>
+        </div>
+      </div>
+      
+      <!-- 角色3存档区块 -->
+      <div class="character-archive" id="role3-archive">
+        <div class="character-info">
+          <div class="character-name">贾宝南</div>
+          <a href="../主线/zhangfu/html/1.html" class="new-game-btn locked">Locked</a>
+        </div>
+        <div class="save-info">
+          <div class="continue-btn" id="role3-continue-text">继续游戏</div>
+          <div class="save-time" id="role3-save-time"></div>
+          <div class="dialogue-preview" id="role3-dialogue"></div>
+          <div class="no-save" id="role3-no-save">暂无存档</div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <h2>copyright 无限灵感工作室</h2>
+  </footer>
+
+<!-- 解锁贾宝南弹窗 -->
+  <div id="unlock-jiabaonan-modal" class="modal">
+    <div class="modal-content">
+      <div class="unlock-icon">🔓</div>
+      <h2>角色解锁</h2>
+      <p>恭喜你成功解锁新角色<br><span class="character-highlight">贾宝南</span>的故事线！</p>
+      <button class="close-btn">开始新的冒险</button>
+    </div>
+  </div>
+  
+  <!-- 解锁林晚星弹窗 -->
+  <div id="unlock-linwanxing-modal" class="modal">
+    <div class="modal-content">
+      <div class="unlock-icon">🔓</div>
+      <h2>角色解锁</h2>
+      <p>恭喜你成功解锁新角色<br><span class="character-highlight">林晚星</span>的故事线！</p>
+      <button class="close-btn">开始新的冒险</button>
+    </div>
+  </div>
+
+  <script>
+    // 定义截断文本的函数
+    function truncateText(text) {
+      const index = text.indexOf('。');
+      if (index !== -1) {
+        return text.substring(0, index) + '...';
+      }
+      return text;
+    }
+
+
+
+    // 定义锁定函数
+    function lockCharacter(roleId) {
+      const btn = document.querySelector(`#${roleId}-archive .new-game-btn`);
+      if (btn) {
+        btn.classList.add('locked');
+        btn.classList.remove('new-game-btn');
+        btn.innerText = "Locked";
+        btn.href = "#";
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.6';
+      }
+    }
+
+// 定义解锁函数（添加状态检查）
+function unlockCharacter(roleId, href) {
+    const btn = document.querySelector(`#${roleId}-archive .locked`);
+    if (!btn) return;
+    
+    // 创建唯一的存储键名
+    const unlockKey = `${roleId}_unlocked`;
+    
+    // 检查是否已经解锁过
+    const alreadyUnlocked = localStorage.getItem(unlockKey) === 'true';
+    
+    btn.classList.remove('locked');
+    btn.classList.add('new-game-btn');
+    btn.innerText = "新游戏";
+    btn.href = href;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = '1';
+    
+    // 只在首次解锁时显示弹窗
+    if (!alreadyUnlocked) {
+        // 显示解锁弹窗
+        if(roleId === 'role3') {
+            const modal = document.getElementById('unlock-jiabaonan-modal');
+            modal.style.display = 'flex';
+        } else if(roleId === 'role2') {
+            const modal = document.getElementById('unlock-linwanxing-modal');
+            modal.style.display = 'flex';
+        }
+        
+        // 在localStorage中标记为已解锁
+        localStorage.setItem(unlockKey, 'true');
+    }
+}
+
+    // 检查成就解锁状态
+    function checkAchievements() {
+      // 模拟解锁状态（实际开发中应从localStorage读取）
+      const userIndex = localStorage.getItem('userid') || '0';
+      const userArr = JSON.parse(localStorage.getItem('userArr') || "[]");
+      
+      if (userArr.length === 0) return;
+      
+      const userData = userArr[userIndex] || {};
+      
+      // 1. 检查郑义全部成就解锁状态
+      const zhengyiData = userData.zhengyi || {};
+      const zhengyiAchievements = [4, 5, 6];
+      const zhengyiAllUnlocked = zhengyiAchievements.every(a => zhengyiData[`achi${a}`] === 1);
+      
+      // 2. 检查贾宝南全部成就解锁状态
+      const jiabaonanData = userData.jiabaonan || {};
+      const jiabaonanAchievements = [3];
+      const jiabaonanAllUnlocked = jiabaonanAchievements.every(a => jiabaonanData[`achi${a}`] === 1);
+      
+      // 应用解锁逻辑
+      if (zhengyiAllUnlocked) {
+        unlockCharacter('role3', '../主线/zhangfu/html/1.html'); // 解锁贾宝南
+      }
+      
+      if (jiabaonanAllUnlocked) {
+        unlockCharacter('role2', '../主线/nvzhu/html/2.html'); // 解锁林晚星
+      }
+    }
+
+    // 当页面加载完成后执行
+    window.addEventListener("DOMContentLoaded", (event) => {
+      // 初始锁定林晚星和贾宝南
+      lockCharacter('role2'); // 林晚星
+      lockCharacter('role3'); // 贾宝南
+      
+      // 检查成就状态
+      checkAchievements();
+      
+      // 设置关闭按钮事件
+      document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          this.closest('.modal').style.display = 'none';
+        });
+      });
+      
+      // 设置模态框点击外部关闭
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this) {
+            this.style.display = 'none';
+          }
+        });
+      });
+      
+      // 加载存档数据
+      const userId = localStorage.getItem('userid') || '0';
+      if (!userId) return;
+      
+      const roles = ["role1", "role2", "role3"];
+      roles.forEach((role) => {
+        const saveKey = `saveData_${userId}_${role}`;
+        const savedData = localStorage.getItem(saveKey);
+        
+        if (savedData) {
+          const data = JSON.parse(savedData);
+          const archive = document.getElementById(`${role}-archive`);
+          const continueBtn = document.getElementById(`${role}-continue-text`);
+          const saveTime = document.getElementById(`${role}-save-time`);
+          const dialogue = document.getElementById(`${role}-dialogue`);
+          const noSave = document.getElementById(`${role}-no-save`);
+          
+          archive.style.background = "rgba(0, 30, 60, 0.6)";
+          saveTime.innerText = `保存于：${new Date(data.time).toLocaleString()}`;
+          
+          const redirectToSavedGame = function() {
+            window.location.href = data.url;
+          };
+          
+          continueBtn.addEventListener('click', redirectToSavedGame);
+          saveTime.addEventListener('click', redirectToSavedGame);
+          
+          if (data.firstLine) {
+            const truncatedText = truncateText(data.firstLine);
+            dialogue.innerText = truncatedText;
+            dialogue.style.display = "block";
+            noSave.style.display = "none";
+          }
+          
+          continueBtn.classList.remove("disabled");
+        } else {
+          document.getElementById(`${role}-continue-text`).classList.add("disabled");
+          document.getElementById(`${role}-no-save`).style.display = "block";
+          document.getElementById(`${role}-dialogue`).style.display = "none";
+        }
+      });
+    });
+  </script>
+  
+</body>
+</html>

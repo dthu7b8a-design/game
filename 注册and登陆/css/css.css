@@ -1,0 +1,432 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap');   
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation; /* 优化移动端触摸体验 */
+            font-family: 'Noto Sans SC', sans-serif; /* 全局使用思源黑体 */
+        }
+        
+        
+        /* 基础布局样式 */
+        body {
+            background-image: url('../../素材/background.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        section {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+        }
+         
+        .container {
+            position: relative;
+            min-height: 400px;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            width: min(90%, 450px);
+            padding: 1rem;
+        }
+         
+        .form {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            padding: clamp(1.5rem, 5vw, 2.5rem);
+        }
+        
+        .checkip {
+            position: relative;
+            width: 100%;
+            height: auto;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+         
+        /* 登录标题样式 */
+        .form h2 {
+            position: relative;
+            color: #fff;
+            font-size: clamp(1.25rem, 4.5vw, 1.5rem);
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+         
+        /* 登录标题悬停效果 */
+        .form h2:hover {
+            color: #000;
+        }
+         
+        /* 登录标题的下划线样式 */
+        .form h2::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -0.625rem;
+            width: 0;
+            height: 0.1875rem;
+            background: #180e0e;
+            transition: 0.5s;
+        }
+         
+        .form h2:hover:before {
+            width: 6.25rem;
+        }
+         
+        .form .inputBox {
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .checkip .inputText {
+            width: 100%;
+            margin-top: 0.9375rem;
+        }
+
+        /* 输入框样式 */
+        .form .inputBox input {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            border: none;
+            border-radius: 1.875rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: clamp(0.875rem, 4vw, 1rem);
+            letter-spacing: 1px;
+            color: #333;
+            box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        /* 输入框焦点效果 */
+        .form .inputBox input:focus {
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 0.5rem 1.5625rem rgba(0, 0, 0, 0.15);
+            transform: translateY(-0.125rem);
+        }
+         
+        /* 输入框悬停效果 */
+        .form .inputBox input:hover {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.2);
+        }
+         
+        .form .inputBox input::placeholder {
+            color: #666;
+        }
+         
+        /* 登录按钮样式 */
+        .form .inputBox input[type="reset"],
+        .form .inputBox input[type="submit"] {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            background: #fff;
+            color: #666;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.25rem;
+            font-size: clamp(1rem, 4.5vw, 1.125rem);
+            min-height: 3.125rem;
+        }
+         
+        /* 登录按钮悬停效果 */
+        .form .inputBox input[type="reset"]:hover,
+        .form .inputBox input[type="submit"]:hover {
+            background: #000;
+            color: #fff;
+            transform: translateY(-0.1875rem);
+            box-shadow: 0 0.625rem 1.5625rem rgba(0, 0, 0, 0.5);
+        }
+        
+        /* 登录按钮激活效果 */
+        .form .inputBox input[type="reset"]:active,
+        .form .inputBox input[type="submit"]:active {
+            transform: translateY(0);
+        }
+        
+        .flex-buttons {
+            display: flex;
+            gap: 0.9375rem;
+            flex-wrap: wrap;
+        }
+        
+        .flex-buttons > * {
+            flex: 1 1 45%;
+            min-width: 8.75rem;
+        }
+
+        .forget {
+            margin-top: 1.25rem;
+            color: #0e225f;
+            letter-spacing: 1px;
+            text-align: center;
+            font-size: clamp(0.875rem, 4vw, 1rem);
+        }
+        
+        .goto {
+            margin-top: 0.3125rem;
+            color: #236;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .goto a {
+            font-size: clamp(0.75rem, 3.5vw, 0.875rem);
+            color: #aa0;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        /* 链接悬停效果 */
+        .goto a:hover {
+            color: #ff0;
+            text-decoration: underline;
+        }
+         
+        .forget a {
+            color: #0b31a1;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: clamp(0.875rem, 4vw, 1rem);
+        }
+
+        /* 忘记密码链接悬停效果 */
+        .forget a:hover {
+            color: #609bff;
+            text-decoration: underline;
+        }
+        
+        /* IP输入框样式 */
+        .checkip .inputText input {
+            width: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0);
+            outline: none;
+            border: 1px solid rgba(255, 255, 255, 0);
+            font-size: clamp(0.75rem, 3.5vw, 0.875rem);
+            letter-spacing: 1px;
+            color: #00aaff;
+            transition: color 0.3s ease;
+        }
+
+        /* IP输入框悬停效果 */
+        .checkip .inputText input:hover {
+            color: #00ddff;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                min-height: auto;
+            }
+            
+            .form {
+                padding: 1.5rem;
+            }
+            
+            .form h2 {
+                letter-spacing: 1px;
+                margin-bottom: 1.25rem;
+            }
+            
+            .forget, .goto {
+                margin-top: 0.9375rem;
+            }
+            
+            .flex-buttons {
+                flex-direction: column;
+                gap: 0.625rem;
+            }
+            
+            .flex-buttons > * {
+                flex: 1 1 100%;
+                min-width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 0.9375rem;
+                padding: 0.5rem;
+            }
+            
+            .form {
+                padding: 1rem;
+            }
+            
+            .form h2 {
+                font-size: 1.125rem;
+                margin-bottom: 1rem;
+            }
+            
+            .form .inputBox {
+                margin-top: 1rem;
+            }
+            
+            .form .inputBox input {
+                padding: 0.75rem 1rem;
+            }
+            
+            .form .inputBox input[type="reset"],
+            .form .inputBox input[type="submit"] {
+                padding: 0.75rem 1rem;
+                font-size: 0.9375rem;
+                margin-top: 1rem;
+            }
+        }
+        
+        /* 超小设备优化 */
+        @media (max-width: 360px) {
+            body {
+                padding: 0.5rem;
+            }
+            
+            .container {
+                border-radius: 0.75rem;
+                width: 100%;
+            }
+            
+            .form {
+                padding: 0.75rem;
+            }
+            
+            .form h2 {
+                font-size: 1.125rem;
+            }
+            
+            .form .inputBox input {
+                font-size: 0.875rem;
+                padding: 0.625rem 0.9375rem;
+            }
+            
+            .forget a, .goto a {
+                font-size: 0.8125rem;
+            }
+        }
+        
+        /* 竖屏设备优化 */
+        @media (orientation: portrait) {
+            body {
+                padding: 1rem;
+            }
+            
+            .container {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+        }
+        
+        /* 横屏设备优化 */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .container {
+                min-height: auto;
+                max-height: 95vh;
+                overflow-y: auto;
+            }
+        }
+        
+        /* 超大屏幕优化 */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 500px;
+            }
+            
+            .form h2 {
+                font-size: 1.75rem;
+            }
+            
+            .form .inputBox input {
+                font-size: 1.125rem;
+                padding: 1rem 1.5rem;
+            }
+            
+            .form .inputBox input[type="reset"],
+            .form .inputBox input[type="submit"] {
+                font-size: 1.25rem;
+                padding: 1rem 1.5rem;
+            }
+        }
+        
+        /* Safari浏览器特定优化 */
+        @media not all and (min-resolution:.001dpcm) {
+            @supports (-webkit-appearance:none) {
+                .container {
+                    backdrop-filter: blur(10px);
+                }
+            }
+        }
+        
+        /* Firefox浏览器滚动条优化 */
+        @-moz-document url-prefix() {
+            .container {
+                background: rgba(255, 255, 255, 0.25);
+            }
+        }
+        
+        /* 添加一个简单动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(1.25rem); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        /* 高对比度模式优化 */
+        @media (prefers-contrast: more) {
+            .container {
+                background: rgba(255, 255, 255, 0.9);
+                border: 2px solid #000;
+            }
+            
+            .form h2 {
+                color: #000;
+            }
+            
+            .form .inputBox input {
+                background: #fff;
+            }
+        }
+        
+        /* 减少动画选项 */
+        @media (prefers-reduced-motion: reduce) {
+            .container {
+                animation: none;
+            }
+            
+            * {
+                transition: none !important;
+            }
+        }

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>重置年</title>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body{
+            background-image: url('./nan.png');
+        }
+    </style>
+    <title>Achievement</title>
+    <link rel="stylesheet" type="text/css" href="../css/htmleaf-demo.css">
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <h1 class="S2">成就页面</h1>
+            <div class="nav-links">
+                <a href="../../achievement/achievement.html">返回上一页</a>
+                <a href="../../../注册and登陆/menu.html">返回主页</a>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <script>
+            window.onload = function () {
+            var index = window.localStorage.userid;
+            var array = JSON.parse(window.localStorage.userArr || "[]");
+            var userData = array[index] || {};
+
+// 初始化当前角色的成就数据
+var roleData = userData['zhengyi'] || {};
+if (Object.keys(roleData).length === 0) {
+    roleData = {
+        achi1: 0,
+        achi2: 0,
+        achi3: 0,
+        achi4: 0,
+        achi5: 0,
+        achi6: 0,
+        achi7: 0,
+        achi8: 0,
+        /* 其他成就属性 */
+    };
+    userData['zhengyi'] = roleData; // 更正这里
+    array[index] = userData;   // 添加这一行
+}
+        console.log('Role Data:', roleData);
+
+    // achi1
+    var achi = roleData.achi1;
+    if (achi == 1) {
+        var tmp = document.getElementById('1');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p11').innerHTML = '骚扰短信';
+        document.getElementById('p12').innerHTML = '恭喜你跳过所有剧情，平凡的度过了一生。';
+    }
+
+    // achi2
+    achi = roleData.achi2;
+    if (achi == 1) {
+        var tmp = document.getElementById('2');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p21').innerHTML = '沉默的真相';
+        document.getElementById('p22').innerHTML ='短暂的犹豫让郑义与真相失之交臂，重置年的秘密也将随着爆炸一同葬身火海......';
+    }
+
+    // achi3
+    achi = roleData.achi3;
+    if (achi == 1) {
+        var tmp = document.getElementById('3');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p31').innerHTML = '正义的代价';
+        document.getElementById('p32').innerHTML = '郑义虽然身处“正义”的一方，却背负了巨大的道德负罪感。为了实现社会意义上的“正义”，所付出的这些人性、生命和情感的代价，是否值得？这种正义真的是我们所追求的吗？';
+    }
+
+    // achi4
+    achi = roleData.achi4;
+    if (achi == 1) {
+        var tmp = document.getElementById('4');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p41').innerHTML = '等价交换';
+        document.getElementById('p42').innerHTML = '贾宝南的暴力与死亡交换，林晚星的复仇与死刑交换，似乎一切都以某种残酷的方式“等价”了，这是郑义心中所贯彻的。而这果决的举报也将化为对过往情感的追忆与悔恨，永远藏在他心底。';
+    }
+
+    // achi5
+    achi = roleData.achi5;
+    if (achi == 1) {
+        var tmp = document.getElementById('5');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p51').innerHTML = '救赎的彼岸';
+        document.getElementById('p52').innerHTML = '郑义选择谅解与陪伴，林晚星在狱中通过学习法律帮助他人，见证了救赎的可能。即使没有神奇的"重置年"，人们依然能够在现实世界中通过承担责任、寻求宽恕和坚守善意，找到真正的救赎之路。';
+    }
+
+    // achi6
+    achi = roleData.achi6;
+    if (achi == 1) {
+        var tmp = document.getElementById('6');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p61').innerHTML = '未重置的罪';
+        document.getElementById('p62').innerHTML = '重置年并不存在，时间流逝，而罪孽不会凭空消失，正义也不会缺席。';
+    }
+
+    // achi7
+    achi = roleData.achi7;
+    if (achi == 1) {
+        var tmp = document.getElementById('7');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p71').innerHTML = '超级侦探';
+        document.getElementById('p72').innerHTML = '恭喜你搜集到了所有线索';
+    }
+
+    // achi8 (I'm assuming it's the sum of achi1 to achi4, you can change it accordingly)
+    achi = roleData.achi1 + roleData.achi2 + roleData.achi3 + roleData.achi4 + roleData.achi5 + roleData.achi6 + roleData.achi7 ;
+    if (achi == 7) {
+        var tmp = document.getElementById('8');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p81').innerHTML = '所有的假设';
+        document.getElementById('p82').innerHTML = '通关全结局';
+    }
+}
+        </script>
+        <div class="cols">
+            <div id=1 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/zy/1.png)">
+                        <div class="inner">
+                            <p id=p11>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p12 class="backstyle">结局成就1</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=2 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/zy/2.png)">
+                        <div class="inner">
+                            <p id=p21>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p22 class="backstyle">结局成就2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=3 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/zy/3.png)">
+                        <div class="inner">
+                            <p id=p31>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p32 class="backstyle">结局成就3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=4 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/zy/4.png)">
+                        <div class="inner">
+                            <p id=p41>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p42 class="backstyle">结局成就4</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=5 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/zy/5.png)">
+                        <div class="inner">
+                            <p id=p51>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p52 class="backstyle">结局成就5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=6 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/zy/6.png)">
+                        <div class="inner">
+                            <p id=p61>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p62 class="backstyle">结局成就6</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=7 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/zy/7.png)">
+                        <div class="inner">
+                            <p id=p71>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p72 class="backstyle">游戏成就</p>
+                            <p id=p72 class="backstyle">游戏通关</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=8 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/all.png)">
+                        <div class="inner">
+                            <p id=p81>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p82 class="backstyle">通关全结局</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <h2>copyright 无限灵感工作室</h2>
+    </footer>
+
+</html>

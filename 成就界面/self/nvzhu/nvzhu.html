@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>重置年</title>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body{
+            background-image: url('./nv.png');
+        }
+    </style>
+    <title>Achievement</title>
+    <link rel="stylesheet" type="text/css" href="../css/htmleaf-demo.css">
+</head>
+<body>
+    <div class="header">
+        <div class="nav">
+            <h1 class="S2">成就页面</h1>
+            <div class="nav-links">
+                <a href="../../achievement/achievement.html">返回上一页</a>
+                <a href="../../../注册and登陆/menu.html">返回主页</a>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper">
+        <script>
+            window.onload = function () {
+            var index = window.localStorage.userid;
+            var array = JSON.parse(window.localStorage.userArr || "[]");
+            var userData = array[index] || {};
+
+// 初始化当前角色的成就数据
+var roleData = userData['linwanxing'] || {};
+if (Object.keys(roleData).length === 0) {
+    roleData = {
+        achi1: 0,
+        achi2: 0,
+        achi3: 0,
+        achi4: 0
+        /* 其他成就属性 */
+    };
+    userData['linwanxing'] = roleData; // 更正这里
+    array[index] = userData;   // 添加这一行
+}
+        console.log('Role Data:', roleData);
+
+    // achi1
+    var achi = roleData.achi1;
+    if (achi == 1) {
+        var tmp = document.getElementById('1');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p11').innerHTML = '隐忍与坚强';
+        document.getElementById('p12').innerHTML = '林晚星不仅挽救了丈夫的健康，某种程度上也拯救了家庭完整的未来，将家庭从彻底毁灭的边缘拉了回来。但这份“救赎”的代价巨大，且并非完美。';
+    }
+
+    // achi2
+    achi = roleData.achi2;
+    if (achi == 1) {
+        var tmp = document.getElementById('2');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p21').innerHTML = '无用的让步';
+        document.getElementById('p22').innerHTML = '以妥协求生存，反而彻底失去了生存的一切希望。';
+    }
+
+    // achi3
+    achi = roleData.achi3;
+    if (achi == 1) {
+        var tmp = document.getElementById('3');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p31').innerHTML = '湮灭的骗局';
+        document.getElementById('p32').innerHTML = '林晚星利用了“重置年”这个骗局操纵了郑义，而她和郑义之后的生活又何尝不是建立在另一个骗局之上。一切真相大白，骗局崩塌，代价也随之到来。';
+    }
+
+    // achi4
+    achi = roleData.achi4;
+    if (achi == 1) {
+        var tmp = document.getElementById('4');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p41').innerHTML = '游戏成就';
+        document.getElementById('p42').innerHTML = '金币≥50,恭喜你赚到了足够的钱给丈夫治病';
+    }
+    
+    // achi5
+    achi = roleData.achi1 + roleData.achi2 + roleData.achi3 + roleData.achi4;
+    if (achi == 4) {
+        var tmp = document.getElementById('5');
+        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        document.getElementById('p51').innerHTML = '所有的假设';
+        document.getElementById('p52').innerHTML = '通关全结局';
+    }
+}
+        </script>
+        <div class="cols">
+            <div id=1 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/lwx/1.png)">
+                        <div class="inner">
+                            <p id=p11>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p12 class="backstyle">结局成就1</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=2 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/lwx/2.png)">
+                        <div class="inner">
+                            <p id=p21>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p22 class="backstyle">结局成就2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=3 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/lwx/3.png)">
+                        <div class="inner">
+                            <p id=p31>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p32 class="backstyle">结局成就3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=4 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/lwx/4.png)">
+                        <div class="inner">
+                            <p id=p41>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p42 class="backstyle">游戏成就<br>金币≥50</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id=5 class="col" ontouchstart="this.classList.toggle('hover');">
+                <div class="container">
+                    <div class="front" style="background-image: url(../../../素材/achievement/结局/all.png)">
+                        <div class="inner">
+                            <p id=p51>Locked</p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="inner">
+                            <p id=p52 class="backstyle">通关全结局</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <footer>
+        <h2>copyright 无限灵感工作室</h2>
+    </footer>
+
+</html>

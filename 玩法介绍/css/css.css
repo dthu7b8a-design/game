@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap');      
+      
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans SC', sans-serif; /* 全局使用思源黑体 */
+}
+
+
+body {
+    font-family: 'Noto Sans SC', serif; /* 同上 */
+    background-image: url('../../素材/background.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* 添加底部内边距防止内容被遮挡 */
+    padding-bottom: 80px; /* 根据footer高度调整 */
+}
+
+/* 统一header样式 */
+.header {
+    width: 100%;
+    padding: 20px 5%;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.S2 {
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 楷体, KaiTi, sans-serif;
+}
+
+.nav-links {
+    display: flex;
+    gap: clamp(10px, 2vw, 25px);
+    margin-top: 10px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: clamp(14px, 3.5vw, 18px);
+    padding: clamp(8px, 1.5vw, 10px) clamp(10px, 2vw, 15px);
+    border-radius: 6px;
+    background: rgba(132, 32, 41, 0.7);
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background: rgba(132, 32, 41, 1);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.intro{
+    margin: auto;
+    width: 70%;
+    color: #000000;
+    border: #ffffff solid;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.content{
+    font-size: 30px;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-size: larger;
+    line-height: 190%;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+.S3{
+    font-size: 40px;
+    font-family: 楷体;
+    text-align: center;
+    line-height: 200%;
+    color: rgb(70, 82, 176);
+    text-decoration-line: underline;
+    font-size: 1.6rem;
+    line-height: 1.8;
+}
+
+
+/* 统一footer样式 */
+footer {
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+footer h2 {
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: normal;
+}
+
+/* 统一响应式样式 */
+@media (max-width: 768px) {
+    .nav {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+/* 添加超小屏幕适配 */
+@media (max-width: 480px) {
+    .header {
+        padding: 15px 5%;
+    }
+    
+    .S2 {
+        font-size: 1.5rem;
+    }
+    
+    .nav-links a {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+    
+    .content {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .S3 {
+        font-size: 1.3rem;
+    }
+    
+    footer h2 {
+        font-size: 0.9rem;
+    }
+}
+
+/* 添加打印样式 */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .header, footer, .nav-links {
+        display: none;
+    }
+    
+    .intro {
+        background: white !important;
+        border: none !important;
+        color: black !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
