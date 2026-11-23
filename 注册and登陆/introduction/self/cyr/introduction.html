@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>成员介绍 - 常依蓉</title>
+    <style>
+        :root {
+            --primary-color: blue;
+            --secondary-color: pink;
+            --background-color: aliceblue;
+        }
+        
+        * {box-sizing: border-box; font-family: "Microsoft YaHei", "楷体", sans-serif;}
+        body {background: var(--background-color); max-width: 1000px; margin: 0 auto; padding: 20px; display: flex; flex-wrap: wrap;}
+            .return a{
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.7);
+            transition: all 0.3s ease;
+
+        }
+
+        .return a:hover {
+            background: rgba(132, 32, 41, 1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+        /* 侧边栏头像 */
+        .sidebar {
+            flex: 1 1 300px;
+            padding: 20px;
+            text-align: center;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-right: 30px;
+            margin-bottom: 30px;
+        }
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        .sidebar h1 {color: var(--primary-color); margin-bottom: 10px;}
+        
+        /* 主要内容区 */
+        .main-content {
+            flex: 1 1 calc(100% - 330px);
+            display: flex;
+            flex-direction: column;
+        }
+        .content-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        h2 {color: var(--primary-color); margin-bottom: 15px; border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px;}
+        p {font-size: 1.1rem; margin-bottom: 15px;}
+</style>
+</head>
+<body>
+    <aside class="sidebar">
+        <img src="常依蓉.JPG" alt="常依蓉照片" class="profile-image">
+        <h1>常依蓉</h1>
+        <div class="return">
+            <a href="../../intro/intro.html">返回上一页</a>
+        </div>
+    </aside>
+    
+    <main class="main-content">
+        <section class="content-section">
+            <h2>简介</h2>
+            <p>本人姓常名依蓉。今年虚岁二十，自北平而来，上京求学。家中有二老，尚能自理。但门衰祚薄，子嗣单薄，吾乃独生女也。今拜读于北京理工大学，以求功名。幸得良师益友一二，大学生活还算可以。</p>
+            <p>今绘制此网页，以表我学习成果。</p>
+        </section>
+        
+        <section class="content-section">
+            <h2>爱好</h2>
+            <p>阅读（看小说）、旅行、弹古筝</p>
+        </section>
+        
+        <section class="content-section">
+            <h2>职位</h2>
+            <p>设计总监，负责设计故事情节。有天马行空的想象力，敬请期待作品《重置年》。</p>
+        </section>
+    </main>
+</body>
+</html>

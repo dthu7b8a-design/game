@@ -41,7 +41,27 @@ test('actual scene HTML loads the engine, save/audio helpers and jQuery; endings
   assert.equal(endings, 14);
 });
 
-test('member introduction files and navigation are absent from the release tree', () => {
-  assert.equal(fs.existsSync(path.join(root, '注册and登陆/introduction')), false);
-  for (const file of ['注册and登陆/menu.html', '成就界面/achievement/achievement.html', '玩法介绍/玩法介绍.html']) assert.doesNotMatch(read(file), /introduction\//, file);
+test('seven introduction pages and three navigation entries retain valid local references', () => {
+  const introduction = path.join(root, '注册and登陆/introduction');
+  const pages = folder => fs.readdirSync(folder, { withFileTypes: true }).flatMap(entry => {
+    const file = path.join(folder, entry.name);
+    return entry.isDirectory() ? pages(file) : file.endsWith('.html') ? [file] : [];
+  });
+  assert.ok(fs.existsSync(introduction), 'introduction directory');
+  const introductions = pages(introduction);
+  assert.equal(introductions.length, 7);
+  for (const file of introductions) {
+    const html = fs.readFileSync(file, 'utf8');
+    for (const [, reference] of html.matchAll(/(?:src|href)\s*=\s*["']([^"']*)["']/gi)) {
+      if (!reference || /^(?:https?:|\/\/|#|data:|javascript:|mailto:)/i.test(reference)) continue;
+      const target = path.resolve(path.dirname(file), decodeURI(reference.split(/[?#]/)[0]));
+      assert.ok(fs.existsSync(target), `${path.relative(root, file)}: ${reference}`);
+    }
+  }
+  for (const file of ['注册and登陆/menu.html', '成就界面/achievement/achievement.html', '玩法介绍/玩法介绍.html']) {
+    const entry = [...read(file).matchAll(/href\s*=\s*["']([^"']*)["']/gi)]
+      .map(match => match[1]).find(reference => /introduction\/intro\/intro\.html$/.test(reference));
+    assert.ok(entry, `${file}: introduction navigation`);
+    assert.ok(fs.existsSync(path.resolve(root, path.dirname(file), entry)), file);
+  }
 });
