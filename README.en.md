@@ -1,36 +1,16 @@
-# 游戏
+# Reset Year
 
-#### Description
-{**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}
+Reset Year is a browser-based narrative adventure created by a six-person team. Players follow three characters through branching choices, multiple endings and two mini-games.
 
-#### Software Architecture
-Software architecture description
+Read the [Chinese README](README.md) for screenshots, installation, controls, architecture, contributor context and known limitations. The game uses static HTML, CSS, JavaScript, jQuery and browser localStorage; no server account or cloud sync is provided.
 
-#### Installation
+```bash
+git clone https://github.com/dthu7b8a-design/game.git
+cd game
+npm ci --ignore-scripts
+npm start
+```
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+Open <http://127.0.0.1:4173/>. Use `npm test`, `npm run check` and `npm run build` for verification and a static build. Node.js 18 or later is required for these scripts.
 
-#### Instructions
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### Contribution
-
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
-
-
-#### Gitee Feature
-
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+Local account passwords retain the original plaintext storage format; do not reuse important passwords. The source license is [Mulan PSL v2](LICENSE); third-party media provenance is documented separately in [THIRD_PARTY_ASSETS.md](docs/THIRD_PARTY_ASSETS.md).
