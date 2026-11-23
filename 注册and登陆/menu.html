@@ -21,7 +21,7 @@
 
     <!-- 背景音乐标签（固定在主页面） -->
   <audio id="bgm" loop>
-    <source src="../music/bgm/主界面.wav" type="audio/mpeg">
+    <source src="../music/主界面.wav" type="audio/wav">
   </audio>
 
   <!-- 右上角音乐控制组件（iframe加载，避免重复） -->
@@ -33,7 +33,6 @@
       <div class="nav-links">
         <a href="../成就界面/achievement/achievement.html">成就页面</a>
         <a href="../玩法介绍/玩法介绍.html">玩法介绍</a>
-        <a href="./introduction/intro/intro.html">关于我们</a>
         <a href="./login.html">退出登录</a>
       </div>
     </div>
@@ -112,163 +111,8 @@
     </div>
   </div>
 
-  <script>
-    // 定义截断文本的函数
-    function truncateText(text) {
-      const index = text.indexOf('。');
-      if (index !== -1) {
-        return text.substring(0, index) + '...';
-      }
-      return text;
-    }
-
-
-
-    // 定义锁定函数
-    function lockCharacter(roleId) {
-      const btn = document.querySelector(`#${roleId}-archive .new-game-btn`);
-      if (btn) {
-        btn.classList.add('locked');
-        btn.classList.remove('new-game-btn');
-        btn.innerText = "Locked";
-        btn.href = "#";
-        btn.style.pointerEvents = 'none';
-        btn.style.opacity = '0.6';
-      }
-    }
-
-// 定义解锁函数（添加状态检查）
-function unlockCharacter(roleId, href) {
-    const btn = document.querySelector(`#${roleId}-archive .locked`);
-    if (!btn) return;
-    
-    // 创建唯一的存储键名
-    const unlockKey = `${roleId}_unlocked`;
-    
-    // 检查是否已经解锁过
-    const alreadyUnlocked = localStorage.getItem(unlockKey) === 'true';
-    
-    btn.classList.remove('locked');
-    btn.classList.add('new-game-btn');
-    btn.innerText = "新游戏";
-    btn.href = href;
-    btn.style.pointerEvents = 'auto';
-    btn.style.opacity = '1';
-    
-    // 只在首次解锁时显示弹窗
-    if (!alreadyUnlocked) {
-        // 显示解锁弹窗
-        if(roleId === 'role3') {
-            const modal = document.getElementById('unlock-jiabaonan-modal');
-            modal.style.display = 'flex';
-        } else if(roleId === 'role2') {
-            const modal = document.getElementById('unlock-linwanxing-modal');
-            modal.style.display = 'flex';
-        }
-        
-        // 在localStorage中标记为已解锁
-        localStorage.setItem(unlockKey, 'true');
-    }
-}
-
-    // 检查成就解锁状态
-    function checkAchievements() {
-      // 模拟解锁状态（实际开发中应从localStorage读取）
-      const userIndex = localStorage.getItem('userid') || '0';
-      const userArr = JSON.parse(localStorage.getItem('userArr') || "[]");
-      
-      if (userArr.length === 0) return;
-      
-      const userData = userArr[userIndex] || {};
-      
-      // 1. 检查郑义全部成就解锁状态
-      const zhengyiData = userData.zhengyi || {};
-      const zhengyiAchievements = [4, 5, 6];
-      const zhengyiAllUnlocked = zhengyiAchievements.every(a => zhengyiData[`achi${a}`] === 1);
-      
-      // 2. 检查贾宝南全部成就解锁状态
-      const jiabaonanData = userData.jiabaonan || {};
-      const jiabaonanAchievements = [3];
-      const jiabaonanAllUnlocked = jiabaonanAchievements.every(a => jiabaonanData[`achi${a}`] === 1);
-      
-      // 应用解锁逻辑
-      if (zhengyiAllUnlocked) {
-        unlockCharacter('role3', '../主线/zhangfu/html/1.html'); // 解锁贾宝南
-      }
-      
-      if (jiabaonanAllUnlocked) {
-        unlockCharacter('role2', '../主线/nvzhu/html/2.html'); // 解锁林晚星
-      }
-    }
-
-    // 当页面加载完成后执行
-    window.addEventListener("DOMContentLoaded", (event) => {
-      // 初始锁定林晚星和贾宝南
-      lockCharacter('role2'); // 林晚星
-      lockCharacter('role3'); // 贾宝南
-      
-      // 检查成就状态
-      checkAchievements();
-      
-      // 设置关闭按钮事件
-      document.querySelectorAll('.close-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          this.closest('.modal').style.display = 'none';
-        });
-      });
-      
-      // 设置模态框点击外部关闭
-      document.querySelectorAll('.modal').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-          if (e.target === this) {
-            this.style.display = 'none';
-          }
-        });
-      });
-      
-      // 加载存档数据
-      const userId = localStorage.getItem('userid') || '0';
-      if (!userId) return;
-      
-      const roles = ["role1", "role2", "role3"];
-      roles.forEach((role) => {
-        const saveKey = `saveData_${userId}_${role}`;
-        const savedData = localStorage.getItem(saveKey);
-        
-        if (savedData) {
-          const data = JSON.parse(savedData);
-          const archive = document.getElementById(`${role}-archive`);
-          const continueBtn = document.getElementById(`${role}-continue-text`);
-          const saveTime = document.getElementById(`${role}-save-time`);
-          const dialogue = document.getElementById(`${role}-dialogue`);
-          const noSave = document.getElementById(`${role}-no-save`);
-          
-          archive.style.background = "rgba(0, 30, 60, 0.6)";
-          saveTime.innerText = `保存于：${new Date(data.time).toLocaleString()}`;
-          
-          const redirectToSavedGame = function() {
-            window.location.href = data.url;
-          };
-          
-          continueBtn.addEventListener('click', redirectToSavedGame);
-          saveTime.addEventListener('click', redirectToSavedGame);
-          
-          if (data.firstLine) {
-            const truncatedText = truncateText(data.firstLine);
-            dialogue.innerText = truncatedText;
-            dialogue.style.display = "block";
-            noSave.style.display = "none";
-          }
-          
-          continueBtn.classList.remove("disabled");
-        } else {
-          document.getElementById(`${role}-continue-text`).classList.add("disabled");
-          document.getElementById(`${role}-no-save`).style.display = "block";
-          document.getElementById(`${role}-dialogue`).style.display = "none";
-        }
-      });
-    });
-  </script>
+  <script src="js/accounts.js" defer></script>
+  <script src="js/menu.js" defer></script>
   
 </body>
 </html>

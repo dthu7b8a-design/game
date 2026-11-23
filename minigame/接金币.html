@@ -574,6 +574,9 @@
         let penSpeed = 7;
         let itemInterval; // 用于存储创建物品的interval
         let gameWon = false; // 新增：记录游戏是否获胜
+        let movementFrame;
+        const fallIntervals = new Set();
+        const effectTimeouts = new Set();
         
         // 获取DOM元素
         const pen = document.getElementById('pen');
@@ -621,6 +624,7 @@
                     keys.ArrowLeft = false;
                     e.preventDefault();
                 });
+                leftBtn.addEventListener('touchcancel', clearDirections);
                 
                 rightBtn.addEventListener('touchstart', function(e) {
                     keys.ArrowRight = true;
@@ -631,6 +635,7 @@
                     keys.ArrowRight = false;
                     e.preventDefault();
                 });
+                rightBtn.addEventListener('touchcancel', clearDirections);
                 
                 // 防止触摸时页面滚动
                 document.addEventListener('touchmove', function(e) {
@@ -641,8 +646,32 @@
             }
         }
         
+        function clearDirections() {
+            keys.ArrowLeft = false;
+            keys.ArrowRight = false;
+        }
+
+        function stopGameLoops() {
+            clearInterval(itemInterval);
+            cancelAnimationFrame(movementFrame);
+            fallIntervals.forEach(clearInterval);
+            fallIntervals.clear();
+            effectTimeouts.forEach(clearTimeout);
+            effectTimeouts.clear();
+        }
+
+        function removeEffectAfterDelay(elements) {
+            const timeout = setTimeout(() => {
+                elements.forEach(element => element.remove());
+                effectTimeouts.delete(timeout);
+            }, 1000);
+            effectTimeouts.add(timeout);
+        }
+
         // 初始化游戏
         function initGame() {
+            stopGameLoops();
+            clearDirections();
             count = 0;
             gameActive = true;
             lives = 3;
@@ -654,13 +683,10 @@
             updateLives();
             
             // 清除所有现有的金币和炸弹
-            document.querySelectorAll('.jin, .bomb').forEach(item => item.remove());
+            document.querySelectorAll('.jin, .bomb, .explosion, .catch-effect, .bomb-effect').forEach(item => item.remove());
             
             // 重置盆的位置
             pen.style.left = '0px';
-            
-            // 重新设置键盘控制
-            setupKeyboardControls();
             
             // 开始移动平台
             movePen();
@@ -674,7 +700,7 @@
             if (count >= 50) {
                 gameActive = false;
                 gameWon = true; // 设置游戏胜利状态
-                clearInterval(itemInterval);
+                stopGameLoops();
                 document.getElementById('victoryScore').textContent = count;
                 victoryScreen.style.display = 'block';
             }
@@ -709,7 +735,7 @@
             
             pen.style.left = newLeft + "px";
             
-            requestAnimationFrame(movePen);
+            movementFrame = requestAnimationFrame(movePen);
         }
         
         // 创建金币或炸弹
@@ -730,6 +756,7 @@
             const fallInterval = setInterval(function(){
                 if(!item.parentNode || !gameActive) {
                     clearInterval(fallInterval);
+                    fallIntervals.delete(fallInterval);
                     return;
                 }
                 
@@ -739,6 +766,7 @@
                 if(item.offsetTop > document.querySelector('.game-container').clientHeight - item.offsetHeight - 30){
                     document.querySelector('.game-container').removeChild(item);
                     clearInterval(fallInterval);
+                    fallIntervals.delete(fallInterval);
                     
                     // 只有金币落地才减血
                     if (!isBomb) {
@@ -749,6 +777,7 @@
                             endGame();
                         }
                     }
+                    return;
                 }
                 
                 // 一边下降一边判断碰撞检测
@@ -774,14 +803,7 @@
                         document.querySelector('.game-container').appendChild(effect);
                         
                         // 移除动画元素
-                        setTimeout(() => {
-                            if (explosion.parentNode) {
-                                explosion.parentNode.removeChild(explosion);
-                            }
-                            if (effect.parentNode) {
-                                effect.parentNode.removeChild(effect);
-                            }
-                        }, 1000);
+                        removeEffectAfterDelay([explosion, effect]);
                         
                         if (lives <= 0) {
                             endGame();
@@ -808,17 +830,15 @@
                         document.querySelector('.game-container').appendChild(effect);
                         
                         // 移除动画元素
-                        setTimeout(() => {
-                            if (effect.parentNode) {
-                                effect.parentNode.removeChild(effect);
-                            }
-                        }, 1000);
+                        removeEffectAfterDelay([effect]);
                     }
                     
                     document.querySelector('.game-container').removeChild(item);
                     clearInterval(fallInterval);
+                    fallIntervals.delete(fallInterval);
                 }
             }, 16); // 约60fps
+            fallIntervals.add(fallInterval);
         }
         
         // 碰撞检测
@@ -836,7 +856,7 @@
         function endGame() {
             gameActive = false;
             gameWon = false; // 游戏失败
-            clearInterval(itemInterval);
+            stopGameLoops();
             document.getElementById('finalScore').textContent = count;
             document.querySelector('.game-over').style.display = 'block';
         }
@@ -872,6 +892,13 @@
         
         // 初始化键盘控制
         setupKeyboardControls();
+        window.addEventListener('blur', clearDirections);
+        window.addEventListener('pagehide', function(event) {
+            if (event.persisted) return;
+            gameActive = false;
+            stopGameLoops();
+            clearDirections();
+        });
     </script>
 </body>
 </html>

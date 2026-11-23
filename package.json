@@ -1,0 +1,14 @@
+{
+  "name": "reset-year",
+  "version": "1.0.0",
+  "private": true,
+  "description": "重置年：原生 JavaScript 多视角文字冒险游戏",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test",
+    "build": "node scripts/build.mjs"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MulanPSL-2.0"
+}

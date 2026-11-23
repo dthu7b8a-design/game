@@ -11,7 +11,7 @@
             background-image: url('./zf.png');
         }
     </style>
-    <title>Achievement</title>
+
     <link rel="stylesheet" type="text/css" href="../css/htmleaf-demo.css">
 </head>
 <body>
@@ -27,8 +27,20 @@
     <div class="wrapper">
         <script>
             window.onload = function () {
+            document.querySelectorAll(".col").forEach(card => {
+                card.tabIndex = 0;
+                card.setAttribute("role", "button");
+                card.addEventListener("keydown", event => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        card.classList.toggle("hover");
+                    }
+                });
+            });
             var index = window.localStorage.userid;
-            var array = JSON.parse(window.localStorage.userArr || "[]");
+            var array;
+            try { array = JSON.parse(window.localStorage.userArr || "[]"); if (!Array.isArray(array)) array = []; }
+            catch (error) { array = []; }
             var userData = array[index] || {};
 
 // 初始化当前角色的成就数据
@@ -50,7 +62,7 @@ if (Object.keys(roleData).length === 0) {
     var achi = roleData.achi1;
     if (achi == 1) {
         var tmp = document.getElementById('1');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p11').innerHTML = '赎罪的新生';
         document.getElementById('p12').innerHTML = '背负着沉重愧疚，贾宝南决心用余生去改正错误、换取新开始的复杂情感和坚定誓言。';
     }
@@ -59,7 +71,7 @@ if (Object.keys(roleData).length === 0) {
     achi = roleData.achi2;
     if (achi == 1) {
         var tmp = document.getElementById('2');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p21').innerHTML = '锒铛入狱';
         document.getElementById('p22').innerHTML = '所谓的“重置年”带来的不是刷新，而是最终的审判和惩罚。牢狱生涯和内心的悔恨将如同无尽的长夜，没有“重置”的希望。';
     }
@@ -68,16 +80,16 @@ if (Object.keys(roleData).length === 0) {
     achi = roleData.achi3;
     if (achi == 1) {
         var tmp = document.getElementById('3');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p31').innerHTML = '她的“重置年”';
         document.getElementById('p32').innerHTML = '贾宝南期待的刷新没有到来，反而是妻子用最极端的方式给了他一个“了断”，完成了属于她的、残酷的“重置”';
     }
 
     // achi4
-    achi = roleData.achi1 + roleData.achi2 + roleData.achi3;
-    if (achi == 3) {
+    achi = [roleData.achi1, roleData.achi2, roleData.achi3].every(value => Number(value) === 1);
+    if (achi) {
         var tmp = document.getElementById('4');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p41').innerHTML = '所有的假设';
         document.getElementById('p42').innerHTML = '通关全结局';
     }

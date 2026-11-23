@@ -239,6 +239,15 @@
             }
             
             shuffleArray(pairs);
+
+            // 满盘只能从相邻对子开始，避免随机生成完全无法落子的开局。
+            const hasOpeningPair = pairs.some((type, index) => type !== -1 &&
+                ((index % config.cols < config.cols - 1 && pairs[index + 1] === type) ||
+                 (index + config.cols < pairs.length && pairs[index + config.cols] === type)));
+            if (!hasOpeningPair && pairs[0] !== -1) {
+                const matchingIndex = pairs.indexOf(pairs[0], 1);
+                [pairs[1], pairs[matchingIndex]] = [pairs[matchingIndex], pairs[1]];
+            }
             
             for (let i = 0; i < config.rows; i++) {
                 for (let j = 0; j < config.cols; j++) {
@@ -338,21 +347,25 @@
         function isOneCornerConnected(row1, col1, row2, col2) {
             return (isPathClear(col1, row1, row2, 'col') && 
                     isPathClear(row2, col1, col2, 'row') &&
-                    !getTileAt(row2, col1).classList.contains('matched')) ||
+                    getTileAt(row2, col1).classList.contains('matched')) ||
                    (isPathClear(row1, col1, col2, 'row') && 
                     isPathClear(col2, row1, row2, 'col') &&
-                    !getTileAt(row1, col2).classList.contains('matched'));
+                    getTileAt(row1, col2).classList.contains('matched'));
         }
         
         function isTwoCornerConnected(row1, col1, row2, col2) {
             for (let i = 0; i < config.rows; i++) {
                 if (i !== row1 && i !== row2 &&
+                    getTileAt(i, col1).classList.contains('matched') &&
+                    getTileAt(i, col2).classList.contains('matched') &&
                     isPathClear(i, col1, col2, 'row') &&
                     isPathClear(col1, row1, i, 'col') &&
                     isPathClear(col2, i, row2, 'col')) return true;
             }
             for (let j = 0; j < config.cols; j++) {
                 if (j !== col1 && j !== col2 &&
+                    getTileAt(row1, j).classList.contains('matched') &&
+                    getTileAt(row2, j).classList.contains('matched') &&
                     isPathClear(j, row1, row2, 'col') &&
                     isPathClear(row1, col1, j, 'row') &&
                     isPathClear(row2, j, col2, 'row')) return true;
@@ -401,6 +414,9 @@
         }
         
         document.getElementById('start-btn').addEventListener('click', initGame);
+        window.addEventListener('pagehide', function(event) {
+            if (!event.persisted) clearInterval(timer);
+        });
         
         // 跳过游戏按钮逻辑
         document.getElementById('jumpBtn').addEventListener('click', function() {

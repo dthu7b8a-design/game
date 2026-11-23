@@ -167,13 +167,13 @@
 /* 响应式调整 */
 @media screen and (max-width: 1200px) {
     .col {
-        width: calc(33.333333% - 1rem);
+        width: calc(33.333333% - 2rem);
     }
 }
 
 @media screen and (max-width: 900px) {
     .col {
-        width: calc(50% - 1rem);
+        width: calc(50% - 2rem);
     }
 }
 
@@ -222,13 +222,12 @@
     }
 }
 
-/* 移动设备触摸优化 */
+/* 解锁状态只影响原来的滤镜，不覆盖响应式宽度。 */
+.col.is-unlocked { filter: brightness(2); }
+.col.hover .container .back { transform: rotateY(0deg); }
+.col.hover .container .front { transform: rotateY(-180deg); }
+.col:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 @media (hover: none) {
-    .container {
-        transform: rotateY(180deg);
-    }
-    
-    .col {
-        filter: none;
-    }
+    .col:not(.hover) .container .front { transform: rotateY(0deg); }
+    .col:not(.hover) .container .back { transform: rotateY(180deg); }
 }

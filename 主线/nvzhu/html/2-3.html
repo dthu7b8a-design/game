@@ -95,9 +95,21 @@ document.addEventListener('DOMContentLoaded',function(){
         typeChar();
     }
 
+    function audioFailure(){
+        startBtn.disabled=false;
+        startBtn.textContent='音频播放失败，点击重试';
+    }
+
     startBtn.addEventListener('click',()=>{
-        bgm.play().catch(()=>{});
-        typeStory();
+        if(startBtn.disabled) return;
+        startBtn.disabled=true;
+        startBtn.textContent='播放独白自述';
+        bgm.play().catch(audioFailure);
+        if(!isTyping && !typingCompleted) typeStory();
+    });
+    bgm.addEventListener('error',audioFailure);
+    window.addEventListener('pagehide',event=>{
+        if(!event.persisted) clearTimeout(typingTimeout);
     });
 
     bgm.addEventListener('ended',()=>{

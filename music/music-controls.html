@@ -55,10 +55,15 @@
         // 播放/暂停
         playPauseBtn.addEventListener('click', function() {
             if (bgm.paused) {
-                bgm.play();
-                localStorage.setItem('bgmPlaying', 'true');
-                musicStatus.textContent = "播放中";
-                playIcon.className = "fas fa-pause";
+                bgm.play().then(() => {
+                    localStorage.setItem('bgmPlaying', 'true');
+                    musicStatus.textContent = "播放中";
+                    playIcon.className = "fas fa-pause";
+                }).catch(() => {
+                    localStorage.setItem('bgmPlaying', 'false');
+                    musicStatus.textContent = "播放失败，请重试";
+                    playIcon.className = "fas fa-play";
+                });
             } else {
                 bgm.pause();
                 localStorage.setItem('bgmPlaying', 'false');

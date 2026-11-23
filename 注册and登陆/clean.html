@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><title>清理本地游戏数据</title><script src="js/accounts.js" defer></script></head>
+<body>
+    <p>清除当前浏览器中本游戏的账户、成就及存档。此操作无法撤销。</p>
+    <button type="button" id="clear-data">清除本地游戏数据</button>
     <script>
-        window.onload = function()
-        {
-            window.localStorage.removeItem("userArr");
-            window.localStorage.removeItem("username");
-            window.localStorage.removeItem("userid");
-            alert("完成！");
-        }
+        document.getElementById('clear-data').addEventListener('click', function () {
+            if (!confirm('确认清除本游戏的全部本地记录？此操作无法撤销。')) return;
+            LocalAccounts.clearAppData(localStorage);
+            alert('完成！');
+        });
     </script>
+</body>
 </html>

@@ -71,23 +71,31 @@
         ];
 
         let index = 0;
+        let transitioning = false;
+        let transitionTimeout;
         const container = document.getElementById('textContainer');
         const jumpBtn = document.getElementById('jumpBtn');
 
         // 点击显示下一句
         document.body.addEventListener('click', () => {
-            if (index < lines.length) {
+            if (index < lines.length && !transitioning) {
+                transitioning = true;
                 container.style.opacity = 0; // 先淡出
-                setTimeout(() => {
+                transitionTimeout = setTimeout(() => {
                     container.textContent = lines[index];
                     container.style.opacity = 1; // 再淡入
                     index++;
+                    transitioning = false;
                     // 最后一条文字显示后显示按钮
                     if(index === lines.length) {
                         jumpBtn.style.display = 'block';
                     }
                 }, 300); // 与 CSS transition 同步淡出时间
             }
+        });
+
+        window.addEventListener('pagehide', event => {
+            if (!event.persisted) clearTimeout(transitionTimeout);
         });
 
         // 按钮跳转

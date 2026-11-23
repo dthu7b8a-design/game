@@ -1,9 +1,11 @@
+(function () {
 var index = window.localStorage.userid;
-var object = JSON.parse(window.localStorage.userArr || "{}");  // 使用对象
-
-if (!object[index]) {
-    object[index] = {};
-}
+var object;
+try { object = JSON.parse(window.localStorage.userArr || "[]"); }
+catch (error) { return; }
+if (!object || typeof object !== 'object' || index === undefined || index === null
+    || !Object.prototype.hasOwnProperty.call(object, index) || !object[index]
+    || typeof object[index] !== 'object') return;
 
 var selectedRole = 'jiabaonan';
 var roleData = object[index][selectedRole];
@@ -21,10 +23,6 @@ if (!roleData) {
 roleData.achi2 = 1;
 object[index][selectedRole] = roleData;
 
-window.localStorage.setItem('userArr', JSON.stringify(object));  // 保存到 localStorage
-
-console.log('Updated object:', object);  // 输出更新后的对象
-
 // 检查是否达成了“全结局”成就
 if ([roleData.achi1, roleData.achi2, roleData.achi3].every(value => value === 1)) {
     roleData.achi4 = 1;
@@ -32,3 +30,6 @@ if ([roleData.achi1, roleData.achi2, roleData.achi3].every(value => value === 1)
     roleData.achi4_desc = "你达成了所有结局！";
     // alert("达成全结局成就");
 }
+
+window.localStorage.setItem('userArr', JSON.stringify(object));
+})();

@@ -11,7 +11,7 @@
             background-image: url('./nv.png');
         }
     </style>
-    <title>Achievement</title>
+
     <link rel="stylesheet" type="text/css" href="../css/htmleaf-demo.css">
 </head>
 <body>
@@ -27,8 +27,20 @@
     <div class="wrapper">
         <script>
             window.onload = function () {
+            document.querySelectorAll(".col").forEach(card => {
+                card.tabIndex = 0;
+                card.setAttribute("role", "button");
+                card.addEventListener("keydown", event => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        card.classList.toggle("hover");
+                    }
+                });
+            });
             var index = window.localStorage.userid;
-            var array = JSON.parse(window.localStorage.userArr || "[]");
+            var array;
+            try { array = JSON.parse(window.localStorage.userArr || "[]"); if (!Array.isArray(array)) array = []; }
+            catch (error) { array = []; }
             var userData = array[index] || {};
 
 // 初始化当前角色的成就数据
@@ -50,7 +62,7 @@ if (Object.keys(roleData).length === 0) {
     var achi = roleData.achi1;
     if (achi == 1) {
         var tmp = document.getElementById('1');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p11').innerHTML = '隐忍与坚强';
         document.getElementById('p12').innerHTML = '林晚星不仅挽救了丈夫的健康，某种程度上也拯救了家庭完整的未来，将家庭从彻底毁灭的边缘拉了回来。但这份“救赎”的代价巨大，且并非完美。';
     }
@@ -59,7 +71,7 @@ if (Object.keys(roleData).length === 0) {
     achi = roleData.achi2;
     if (achi == 1) {
         var tmp = document.getElementById('2');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p21').innerHTML = '无用的让步';
         document.getElementById('p22').innerHTML = '以妥协求生存，反而彻底失去了生存的一切希望。';
     }
@@ -68,7 +80,7 @@ if (Object.keys(roleData).length === 0) {
     achi = roleData.achi3;
     if (achi == 1) {
         var tmp = document.getElementById('3');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p31').innerHTML = '湮灭的骗局';
         document.getElementById('p32').innerHTML = '林晚星利用了“重置年”这个骗局操纵了郑义，而她和郑义之后的生活又何尝不是建立在另一个骗局之上。一切真相大白，骗局崩塌，代价也随之到来。';
     }
@@ -77,16 +89,16 @@ if (Object.keys(roleData).length === 0) {
     achi = roleData.achi4;
     if (achi == 1) {
         var tmp = document.getElementById('4');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p41').innerHTML = '游戏成就';
         document.getElementById('p42').innerHTML = '金币≥50,恭喜你赚到了足够的钱给丈夫治病';
     }
     
     // achi5
-    achi = roleData.achi1 + roleData.achi2 + roleData.achi3 + roleData.achi4;
-    if (achi == 4) {
+    achi = [roleData.achi1, roleData.achi2, roleData.achi3, roleData.achi4].every(value => Number(value) === 1);
+    if (achi) {
         var tmp = document.getElementById('5');
-        tmp.setAttribute('style', 'width: calc(25% - 2rem); margin: 1rem;cursor: pointer; filter:brightness(2);');
+        tmp.classList.add('is-unlocked');
         document.getElementById('p51').innerHTML = '所有的假设';
         document.getElementById('p52').innerHTML = '通关全结局';
     }

@@ -60,28 +60,14 @@ function performTransition() {
 }
 // 显示小立绘
 function next_small() {
-    if (click == 0) {
-        if (op.small[click] != "none") {
-            document.getElementById("small_pic").src="../../../素材/立绘/"+op.small[click]+".png";
-            $("#small_pic").fadeIn();
-        }
-        else {
-            document.getElementById("small_pic").src = "../../../素材/立绘/transparent.png";
-        }
+    if (click == 0 || op.small[click - 1] != op.small[click]) {
+        var portrait = op.small[click];
+        $("#small_pic").hide();
+        document.getElementById("small_pic").src = portrait && portrait != "none"
+            ? "../../../素材/立绘/" + portrait + ".png"
+            : "../../../素材/立绘/transparent.png";
+        $("#small_pic").fadeIn();
     }
-    else {
-        if (op.small[click - 1] != op.small[click]) {
-            $("#small_pic").hide();
-            if (op.small[click] == "none") {
-                document.getElementById("small_pic").src = "../../../素材/立绘/transparent.png";
-            }
-            else {
-                document.getElementById("small_pic").src = "../../../素材/立绘/"+op.small[click]+".png";
-            }
-            $("#small_pic").fadeIn();
-        }
-    }
-    return;
 }
 
 function MusicPlayer() {//对话框音效
